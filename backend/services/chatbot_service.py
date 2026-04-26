@@ -1,5 +1,5 @@
 import os
-from mistralai import Mistral
+from mistralai.client import Mistral
 
 MISTRAL_API_KEY = os.environ.get("MISTRAL_API_KEY")
 MISTRAL_MODEL = "mistral-large-latest"

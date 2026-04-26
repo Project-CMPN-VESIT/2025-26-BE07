@@ -1,6 +1,6 @@
 import json
 from openai import OpenAIError
-from utils.gemini_client import MODEL
+from utils.gemini_client_mindmap import MODEL1
 
 def generate_mindmap_code(client, text: str):
     messages = [
@@ -64,7 +64,7 @@ Create a beautiful, student-friendly mind map from the text provided below.
 
     try:
         resp = client.chat.completions.create(
-            model=MODEL,
+            model=MODEL1,
             messages=messages,
             response_format={"type": "json_object"}
         )

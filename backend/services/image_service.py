@@ -1,6 +1,7 @@
 import json
 import requests
 import os
+import uuid
 from openai import OpenAIError
 from utils.gemini_client import MODEL
 
@@ -108,15 +109,14 @@ OUTPUT FORMAT (STRICT JSON ONLY):
             response_format={"type": "json_object"}
         )
         data = json.loads(resp.choices[0].message.content)
-        return data.get("images", [])
+        return data.get("images", [])  # no [:1] cap — allow up to 3
 
     except (OpenAIError, json.JSONDecodeError) as e:
         print(f"Error generating image prompts: {str(e)}")
         raise ValueError(f"Failed to generate image prompts: {str(e)}")
 
-
 def generate_images_runware(prompts: list):
-    """Step 2: Generate images via Runware API."""
+    """Step 2: Generate images via Runware API with minimum credit usage."""
     results = []
 
     for item in prompts:
@@ -124,11 +124,12 @@ def generate_images_runware(prompts: list):
             payload = [
                 {
                     "taskType": "imageInference",
-                    "taskUUID": _make_uuid(),
+                    "taskUUID": str(uuid.uuid4()),
                     "positivePrompt": item["prompt"],
-                    "width": 1024,
-                    "height": 1024,
-                    "model": "runware:100@1",   # fast general model, swap as needed
+                    "width": 512,           # cheaper than 1024x1024
+                    "height": 512,
+                    "model": "runware:100@1",  # cheapest valid model
+                    "steps": 4,             # minimum steps
                     "numberResults": 1,
                     "outputFormat": "WEBP",
                     "includeCost": False
@@ -148,7 +149,6 @@ def generate_images_runware(prompts: list):
             response.raise_for_status()
             data = response.json()
 
-            # Runware returns { "data": [ { "imageURL": "...", ... } ] }
             image_url = data["data"][0]["imageURL"]
 
             results.append({
@@ -171,8 +171,3 @@ def generate_images_runware(prompts: list):
             })
 
     return results
-
-
-def _make_uuid():
-    import uuid
-    return str(uuid.uuid4())
