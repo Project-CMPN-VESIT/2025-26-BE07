@@ -146,7 +146,7 @@ EDUBRIDGE-FINAL/
 ### **Backend**
 - **Framework:** Flask
 - **AI Models:**
-  - Google Vertex AI with fine-tuned Gemini 2.5 Flash
+  - Mistral 
 - **PDF Processing:** PyMuPDF (fitz) - for extracting text from PDFs
 - **API Architecture:** RESTful API with Blueprints
 - **CORS:** Flask-CORS for cross-origin requests
@@ -168,7 +168,6 @@ Before you start, make sure you have:
 - **Python 3.8+** - [Download](https://www.python.org/)
 - **Node.js 16+** - [Download](https://nodejs.org/)
 - **Git** - [Download](https://git-scm.com/)
-- **Google Generative AI API Key** - [Get it here](https://makersuite.google.com/app/apikey)
 
 ## Backend Setup
 
